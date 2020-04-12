@@ -1,4 +1,5 @@
 import React from 'react';
+import LinkedInApi from './config';
 
 export default class Login extends React.Component {
     constructor(props) {
