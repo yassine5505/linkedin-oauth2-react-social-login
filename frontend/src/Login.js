@@ -1,5 +1,5 @@
 import React from 'react';
-import LinkedInApi from './config';
+import LinkedInApi, { NodeServer } from './config';
 
 export default class Login extends React.Component {
     constructor(props) {
@@ -18,7 +18,12 @@ export default class Login extends React.Component {
     };
 
     getUserCredentials = code => {
-        
+        axios
+            .get(NodeServer.baseURL + NodeServer.getUserCredentials)
+            .then(res => {
+                // Do something with data
+                console.log(JSON.stringify(res));
+            })
     }
 
     showPopup = () => {
