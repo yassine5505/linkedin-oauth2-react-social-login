@@ -6,8 +6,13 @@ const axios = require('axios');
 const urlToGetLinkedInAccessToken = 'https://www.linkedin.com/oauth/v2/accessToken';
 
 app.get('/login', function (req, res) {
-  var code = req.body.code;
-  if(getAccessToken(code) === null) break;
+  // First get access token
+
+  // Then get user's profile
+
+  // After that, get user's email address
+
+  // Finally, send response
 })
 
 /**
@@ -23,7 +28,7 @@ function getAccessToken(code) {
   const parameters = {
     "grant_type": "authorization_code",
     "code": code,
-    "redirect_uri": process.env.REDIRECT_URL,
+    "redirect_uri": process.env.REDIRECT_URI,
     "client_id": process.env.CLIENT_ID,
     "client_secret": process.env.CLIENT_SECRET,
   };
