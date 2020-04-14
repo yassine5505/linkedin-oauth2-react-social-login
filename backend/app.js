@@ -4,15 +4,17 @@ const app = express()
 const axios = require('axios');
 
 const urlToGetLinkedInAccessToken = 'https://www.linkedin.com/oauth/v2/accessToken';
+const urlTogetUserProfile ='https://api.linkedin.com/v2/me?projection=(id,localizedFirstName,localizedLastName,profilePicture(displayImage~digitalmediaAsset:playableStreams))'
 
 app.get('/login', function (req, res) {
+  const user = {};
   // First get access token
 
   // Then get user's profile
 
   // After that, get user's email address
 
-  // Finally, send response
+  // Finally, send response with user
 })
 
 /**
@@ -48,15 +50,42 @@ function getAccessToken(code) {
     return accessToken;
 }
 
-function getUserInformation(accessToken) {
-  // Make request to get user's full name and profile image URL
+function getUserProfile(accessToken) {
+  const userProfile = null;
+  const config = {
+    headers: {
+      "Authorization": `Bearer ${urlTogetUserProfile}`
+    }
+  }
+
+  axios
+    .get(urlToGetLinkedInAccessToken, config)
+    .then(response => {
+      userProfile.firstName = response.data["localizedFirstName"];
+      userProfile.lastName = response.data["localizedLastName"];
+      userProfile.profileImageURL = response.data.profilePicture["displayImage~"].elements[0].identifiers[0].identifier;
+      // I mean, couldn't they have burried it any deeper?
+    })
+    .catch(error => {
+      userProfile = null;
+    })
 }
 
 function getUserEmailAddress(accessToken) {
   // Make request to get user's email address
 }
 
-
+/**
+ * Build User object
+ */
+function userBuilder(userProfile, userEmail) {
+  return {
+    "firstName": userProfile.firstName,
+    "lastName": userProfile.lastName,
+    "profileImageURL": userProfile.profileImageURL,
+    "email": userEmail
+  }
+}
 
 app.listen(3000, function () {
   console.log(`Node server running...`)
