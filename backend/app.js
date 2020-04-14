@@ -4,8 +4,8 @@ const app = express()
 const axios = require('axios');
 
 const urlToGetLinkedInAccessToken = 'https://www.linkedin.com/oauth/v2/accessToken';
-const urlTogetUserProfile ='https://api.linkedin.com/v2/me?projection=(id,localizedFirstName,localizedLastName,profilePicture(displayImage~digitalmediaAsset:playableStreams))'
-
+const urlToGetUserProfile ='https://api.linkedin.com/v2/me?projection=(id,localizedFirstName,localizedLastName,profilePicture(displayImage~digitalmediaAsset:playableStreams))'
+const urlToGetUserEmail = 'https://api.linkedin.com/v2/clientAwareMemberHandles?q=members&projection=(elements*(primary,type,handle~))';
 app.get('/login', function (req, res) {
   const user = {};
   // First get access token
@@ -34,7 +34,6 @@ function getAccessToken(code) {
     "client_id": process.env.CLIENT_ID,
     "client_secret": process.env.CLIENT_SECRET,
   };
-
   axios
     .post(
       urlToGetLinkedInAccessToken,
@@ -54,12 +53,11 @@ function getUserProfile(accessToken) {
   const userProfile = null;
   const config = {
     headers: {
-      "Authorization": `Bearer ${urlTogetUserProfile}`
+      "Authorization": `Bearer ${accessToken}`
     }
   }
-
   axios
-    .get(urlToGetLinkedInAccessToken, config)
+    .get(urlToGetUserProfile, config)
     .then(response => {
       userProfile.firstName = response.data["localizedFirstName"];
       userProfile.lastName = response.data["localizedLastName"];
@@ -69,10 +67,24 @@ function getUserProfile(accessToken) {
     .catch(error => {
       userProfile = null;
     })
+  return userProfile;
 }
 
 function getUserEmailAddress(accessToken) {
-  // Make request to get user's email address
+  const email = null;
+  const config = {
+    headers: {
+      "Authorization": `Bearer ${urlToGetUserProfile}`
+    }
+  };
+  axios
+    .get(urlToGetUserEmail, config)
+    .then(response => {
+      email = response.data.elements[0]["handle~"];
+    })
+    .catch(error => error)
+
+  return email;
 }
 
 /**
@@ -80,10 +92,10 @@ function getUserEmailAddress(accessToken) {
  */
 function userBuilder(userProfile, userEmail) {
   return {
-    "firstName": userProfile.firstName,
-    "lastName": userProfile.lastName,
-    "profileImageURL": userProfile.profileImageURL,
-    "email": userEmail
+    firstName: userProfile.firstName,
+    lastName: userProfile.lastName,
+    profileImageURL: userProfile.profileImageURL,
+    email: userEmail
   }
 }
 
