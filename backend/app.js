@@ -1,20 +1,23 @@
-const express = require('express')
-const 
-const app = express()
+const express = require('express');
+const cors = require('cors');
+const app = express();
 const axios = require('axios');
 
+app.use(cors());
+
+// Constand
 const urlToGetLinkedInAccessToken = 'https://www.linkedin.com/oauth/v2/accessToken';
 const urlToGetUserProfile ='https://api.linkedin.com/v2/me?projection=(id,localizedFirstName,localizedLastName,profilePicture(displayImage~digitalmediaAsset:playableStreams))'
 const urlToGetUserEmail = 'https://api.linkedin.com/v2/clientAwareMemberHandles?q=members&projection=(elements*(primary,type,handle~))';
+
 app.get('/login', function (req, res) {
   const user = {};
-  // First get access token
-
-  // Then get user's profile
-
-  // After that, get user's email address
-
-  // Finally, send response with user
+  const accessToken = getAccessToken(code);
+  const userProfile = getUserProfile(accessToken);
+  const userEmail = getUserEmail(accessToken);
+  user = userBuilder(userProfile, userEmail);
+  const resStatus = (!accessToken || !userProfile || !userEmail) ? 400 : 200;
+  res.status(resStatus).json({ user });
 })
 
 /**
@@ -70,7 +73,7 @@ function getUserProfile(accessToken) {
   return userProfile;
 }
 
-function getUserEmailAddress(accessToken) {
+function getUserEmail(accessToken) {
   const email = null;
   const config = {
     headers: {
