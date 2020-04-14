@@ -10,13 +10,15 @@ const urlToGetLinkedInAccessToken = 'https://www.linkedin.com/oauth/v2/accessTok
 const urlToGetUserProfile ='https://api.linkedin.com/v2/me?projection=(id,localizedFirstName,localizedLastName,profilePicture(displayImage~digitalmediaAsset:playableStreams))'
 const urlToGetUserEmail = 'https://api.linkedin.com/v2/clientAwareMemberHandles?q=members&projection=(elements*(primary,type,handle~))';
 
-app.get('/login', function (req, res) {
+app.get('/getUserCredentials', function (req, res) {
   const user = {};
   const accessToken = getAccessToken(code);
   const userProfile = getUserProfile(accessToken);
   const userEmail = getUserEmail(accessToken);
   user = userBuilder(userProfile, userEmail);
   const resStatus = (!accessToken || !userProfile || !userEmail) ? 400 : 200;
+  // Here, you can implement your own login logic 
+  // to authenticate new user or register him
   res.status(resStatus).json({ user });
 })
 
