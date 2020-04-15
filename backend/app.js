@@ -24,7 +24,7 @@ app.get('/getUserCredentials', function (req, res) {
 
 /**
  * Get access token from LinkedIn
- * @param {*} code returned from step 1
+ * @param code returned from step 1
  * @returns accessToken if successful or null if request fails 
  */
 function getAccessToken(code) {
@@ -54,6 +54,10 @@ function getAccessToken(code) {
     return accessToken;
 }
 
+/**
+ * Get user first and last name and profile image URL
+ * @param accessToken returned from step 2
+ */
 function getUserProfile(accessToken) {
   const userProfile = null;
   const config = {
@@ -75,11 +79,16 @@ function getUserProfile(accessToken) {
   return userProfile;
 }
 
+
+/**
+ * Get user email
+ * @param accessToken returned from step 2
+ */
 function getUserEmail(accessToken) {
   const email = null;
   const config = {
     headers: {
-      "Authorization": `Bearer ${urlToGetUserProfile}`
+      "Authorization": `Bearer ${accessToken}`
     }
   };
   axios
