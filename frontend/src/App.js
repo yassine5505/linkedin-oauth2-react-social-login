@@ -9,7 +9,7 @@ export default class App extends React.Component {
         const code = getCode(window.location.href);
         window.opener.postMessage({'type': 'code', 'code': code}, '*')
         window.close();
-    }
+      }
         window.addEventListener('message', this.handlePostMessage);
     };
 
