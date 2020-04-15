@@ -13,7 +13,7 @@ export default class Login extends React.Component {
     handlePostMessage = event => {
         if (event.data.type === 'code') {
           const { code } = event.data;
-          this.loginWithLinkedin(code);
+          this.getUserCredentials(code);
         }
     };
 
@@ -22,7 +22,7 @@ export default class Login extends React.Component {
             .get(NodeServer.baseURL + NodeServer.getUserCredentials)
             .then(res => {
                 // Do something with data
-                console.log(JSON.stringify(res));
+                console.log(res.data);
             })
     }
 
