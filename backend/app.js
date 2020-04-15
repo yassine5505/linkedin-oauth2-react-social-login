@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const axios = require('axios');
-
+const qs = require('query-string');
 app.use(cors());
 
 // Constand
@@ -12,11 +12,15 @@ const urlToGetUserEmail = 'https://api.linkedin.com/v2/clientAwareMemberHandles?
 
 app.get('/getUserCredentials', function (req, res) {
   const user = {};
+  const code = req.query.code;
   const accessToken = getAccessToken(code);
   const userProfile = getUserProfile(accessToken);
   const userEmail = getUserEmail(accessToken);
-  user = userBuilder(userProfile, userEmail);
-  const resStatus = (!accessToken || !userProfile || !userEmail) ? 400 : 200;
+  let resStatus = 400;
+  if(!(accessToken === null || userProfile === null || userEmail === null)) {
+    user = userBuilder(userProfile, userEmail);
+    resStatus = 200;
+  }
   // Here, you can implement your own login logic 
   // to authenticate new user or register him
   res.status(resStatus).json({ user });
@@ -48,8 +52,7 @@ function getAccessToken(code) {
       accessToken = response.data["access_token"];
     })
     .catch(err => {
-      console.log("Error getting LinkedIn access token:");
-      console.log(err.body);
+      console.log("Error getting LinkedIn access token");
     })
     return accessToken;
 }
@@ -59,7 +62,7 @@ function getAccessToken(code) {
  * @param accessToken returned from step 2
  */
 function getUserProfile(accessToken) {
-  const userProfile = null;
+  let userProfile = null;
   const config = {
     headers: {
       "Authorization": `Bearer ${accessToken}`
@@ -73,9 +76,7 @@ function getUserProfile(accessToken) {
       userProfile.profileImageURL = response.data.profilePicture["displayImage~"].elements[0].identifiers[0].identifier;
       // I mean, couldn't they have burried it any deeper?
     })
-    .catch(error => {
-      userProfile = null;
-    })
+    .catch(error => console.log("Error grabbing user profile"))
   return userProfile;
 }
 
@@ -96,7 +97,7 @@ function getUserEmail(accessToken) {
     .then(response => {
       email = response.data.elements[0]["handle~"];
     })
-    .catch(error => error)
+    .catch(error => console.log("Error getting user email"))
 
   return email;
 }
