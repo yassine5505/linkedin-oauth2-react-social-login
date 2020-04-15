@@ -10,11 +10,6 @@ export default class App extends React.Component {
         window.opener.postMessage({'type': 'code', 'code': code}, '*')
         window.close();
     }
-
-    function getCode(url) {
-        const popupWindowURL = new URL(url);
-        return popupWindowURL.searchParams.get("code");
-    }
         window.addEventListener('message', this.handlePostMessage);
     };
 
@@ -55,6 +50,11 @@ export default class App extends React.Component {
           left
         );
     };
+
+    getCode = url => {
+      const popupWindowURL = new URL(url);
+      return popupWindowURL.searchParams.get("code");
+  }
 
     render() {
         return (
