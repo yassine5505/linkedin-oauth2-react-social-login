@@ -36,9 +36,8 @@ export default class App extends React.Component {
   };
 
   showPopup = () => {
-    const clientId = LinkedInApi.clientId;
-    const redirectUrl = LinkedInApi.redirectUrl;
-    const oauthUrl = `${LinkedInApi.oauthUrl}&client_id=${clientId}&scope=${LinkedInApi.scope}&state=123456&redirect_uri=${redirectUrl}`;
+    const { clientId, redirectUrl, oauthUrl, scope, state } = LinkedInApi;
+    const oauthUrl = `${oauthUrl}&client_id=${clientId}&scope=${scope}&state=${state}&redirect_uri=${redirectUrl}`;
     const width = 450,
       height = 730,
       left = window.screen.width / 2 - width / 2,
