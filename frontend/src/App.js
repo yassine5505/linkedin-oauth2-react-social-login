@@ -86,7 +86,7 @@ export default class App extends React.Component {
     );
     return (
       <div>
-        {loggedIn ? contentWhenLoggedIn : contentWhenLoggedOut}
+        {loggedIn && user !== {} ? contentWhenLoggedIn : contentWhenLoggedOut}
       </div>
     )
   };
