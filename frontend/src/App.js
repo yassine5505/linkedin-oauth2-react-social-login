@@ -21,12 +21,12 @@ export default class App extends React.Component {
     };
 
     getUserCredentials = code => {
-        axios
-            .get(NodeServer.baseURL + NodeServer.getUserCredentials)
-            .then(res => {
-                // Do something with data
-                console.log(res.data);
-            })
+      axios
+        .get(NodeServer.baseURL + NodeServer.getUserCredentials)
+        .then(res => {
+            // Do something with data
+            console.log(res.data);
+        })
     }
 
     showPopup = () => {
