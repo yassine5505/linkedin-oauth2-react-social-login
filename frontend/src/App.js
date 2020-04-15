@@ -58,7 +58,7 @@ export default class App extends React.Component {
 
   getUserCredentials = code => {
     axios
-      .get(NodeServer.baseURL + NodeServer.getUserCredentials)
+      .get(`${NodeServer.baseURL} + ${NodeServer.getUserCredentials}?code=${code}`)
       .then(res => {
         const user = res.data;
         this.setState({
