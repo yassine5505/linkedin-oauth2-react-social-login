@@ -16,18 +16,5 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-
-  <script>
-    if (window.opener && window.opener !== window) {
-        const code = getCode(window.location.href);
-        window.opener.postMessage({'type': 'code', 'code': code}, '*')
-        window.close();
-    }
-
-    function getCode(url) {
-        const popupWindowURL = new URL(url);
-        return popupWindowURL.searchParams.get("code");
-    }
-  </script>
   </body>
 </html>
