@@ -1,12 +1,17 @@
 import React from 'react';
 import{ LinkedInApi, NodeServer } from './config';
 import axios from 'axios';
+import linkedInLoginImage from './linkedin-login-images/Retina/Sign-In-Large---Default.png';
+
+const getCodeFromWindowURL = url => {
+  const popupWindowURL = new URL(url);
+  return popupWindowURL.searchParams.get("code");
+};
 
 export default class App extends React.Component {
-
     componentDidMount = () => {
       if (window.opener && window.opener !== window) {
-        const code = getCode(window.location.href);
+        const code = getCodeFromWindowURL(window.location.href);
         window.opener.postMessage({'type': 'code', 'code': code}, '*')
         window.close();
       }
@@ -51,16 +56,11 @@ export default class App extends React.Component {
         );
     };
 
-    getCode = url => {
-      const popupWindowURL = new URL(url);
-      return popupWindowURL.searchParams.get("code");
-  }
-
     render() {
         return (
             <div>
                 <h2>Sign in with LinkedIn</h2>
-                <button onClick={this.showPopup}>Sign</button>
+                <img src={linkedInLoginImage} alt="Sign in with LinkedIn" onClick={this.showPopup} />
             </div>
         )
     };
